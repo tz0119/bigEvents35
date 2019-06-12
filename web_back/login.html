@@ -9,6 +9,8 @@
     <link rel="stylesheet" type="text/css" href="css/reset.css">
     <link rel="stylesheet" type="text/css" href="css/iconfont.css">
     <link rel="stylesheet" type="text/css" href="css/main.css">
+    <!-- 导入bootstrap的css文件 -->
+    <link rel="stylesheet" href="./js/bootstrap/css//bootstrap.min.css">
 </head>
 
 <body>
@@ -29,7 +31,77 @@
             </form>
         </div>
 
-    </div> 
+    </div>
+
+    <!-- bootstrap模块框文本文件 -->
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">泰拳警告</h4>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close关闭</button>
+                    <button type="button" class="btn btn-primary">confirm确认</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="./js/jquery-1.12.4.min.js"></script>
+    <!-- 引入bootstrap的js文件 -->
+    <script src="./js//bootstrap//js/bootstrap.min.js"></script>
+    <script>
+        $(function () {
+            $('.input_sub').on('click', function (e) {
+                e.preventDefault();
+                //获取用户输入的姓名和密码;
+                var username = $('.input_txt').val().trim();
+                var password = $('.input_pass').val().trim();
+                // console.log(username + ':' + password)
+                //判断一下输入的username和password输入为空时;
+                if (username == '' || password == '') {
+                    $('.modal-body').text('请输入用户名和密码');
+                    // alert('输入用户名和密码有误,请重新输入')
+                    // bootstrap引入的js;
+                    $('#myModal').modal({
+                        keyboard: true
+                    })
+                    return;
+                }
+                $.ajax({
+                    type: 'post',
+                    url: 'https://autumnfish.cn/big/admin/login',
+                    data: {
+                        user_name: username,
+                        password: password,
+                    },
+                    success: function (backdata) {
+                        console.log(backdata)
+                        //判断从ajax回来的数据是否成功,如果不成功就弹出用户名和密码错误;
+                        if (backdata.code != 200) {
+                            // alert('用户名和密码错误')
+                            $('.modal-body').text('用户名和密码错误,请重新输入');
+                            // bootstrap引入的js;
+                            $('#myModal').modal({
+                                keyboard: true
+                            })
+
+                        } else {
+                            window.location.href = 'https:www.jd.com';
+                        }
+                    }
+                })
+
+            })
+        })
+    </script>
 
 </body>
 
