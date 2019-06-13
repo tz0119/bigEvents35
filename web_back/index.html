@@ -131,7 +131,7 @@
         }
     </script>
 
-<!-- 导入bs模块化js -->
+    <!-- 导入bs模块化js -->
     <script src="./js//bootstrap//js//bootstrap.min.js"></script>
     <script>
         $(function () {
@@ -150,6 +150,21 @@
                         }
                     }
                 })
+            });
+
+
+            //获取用户的信息;首先发送ajax请求获取数据;
+            $.ajax({
+                type: 'get',
+                url: 'http://localhost:8000/admin/getuser',
+                success: function (backData) {
+                    // console.log(backdata);
+                    //渲染左边; 
+                    $('.user_info>span').text(backData.data.nickname)
+                    $('.user_info>img').attr('src',backData.data.user_pic)
+                    //渲染右边;
+                    $('.user_center_link>img').attr('src',backData.data.user_pic)
+                }
             })
         })
     </script>
