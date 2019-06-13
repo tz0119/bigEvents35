@@ -24,19 +24,19 @@
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">用户名称：</label>
                     <div class="col-sm-4">
-                        <input type="text" class="form-control" id="inputEmail3" value="李思思">
+                        <input type="text" class="form-control username" id="inputEmail3" value="李思思">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">昵称：</label>
                     <div class="col-sm-4">
-                        <input type="text" class="form-control" id="inputEmail3" value="思思">
+                        <input type="text" class="form-control nickname" id="inputEmail3" value="思思">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">邮箱：</label>
                     <div class="col-sm-4">
-                        <input type="text" class="form-control" id="inputEmail3" value="lisisi@126.com">
+                        <input type="text" class="form-control email" id="inputEmail3" value="lisisi@126.com">
                     </div>
                 </div>
                 
@@ -51,7 +51,7 @@
                 <div class="form-group">
                         <label for="inputEmail3" class="col-sm-2 control-label">密码：</label>
                         <div class="col-sm-4">
-                            <input type="password" class="form-control" id="inputEmail3" value="12345678">
+                            <input type="password" class="form-control password" id="inputEmail3" value="12345678">
                         </div>
                     </div>
                
@@ -64,6 +64,33 @@
             </form>
         </div>
     </div>
+
+    <script>
+        $(function () {
+            $.ajax({
+                type :'get',
+                url :'http://localhost:8000/admin/userinfo_get',
+                success:function(backdata){
+                    console.log(backdata);
+                    // $('input.username').val(backdata.data.username);
+                    // $('input.nickname').val(backdata.data.nickname);
+                    // $('input.email').val(backdata.data.email);
+                    // $('img.user_pic').attr('src',backdata.data.user_pic);
+                    // $('input.password').val(backdata.data.password);
+
+                    //简单写法:
+                    for(var key in backdata.data){
+                        $('input.'+key).val(backdata.data[key]);
+                        // console.log(key)
+                        // console.log(backdata.data)
+                    }
+                    $('img.user_pic').attr('src',backdata.data.user_pic)
+                    // console.log(backdata.data.user_pic) 
+                }
+            })
+          })
+    
+    </script>
 
 </body>
 
