@@ -145,17 +145,20 @@
     </script>
     <script>
         $(function () {
-            $.ajax({
-                type: 'get',
-                url: 'http://localhost:8000/admin/category_search',
-                success: function (backData) {
-                    console.log(backData);
-                    //调用模板方法
-                    var resHtml = template('ooo', backData);
-                    $('tbody').html(resHtml);;
-                }
-            });
-
+            function getkind() {
+                $.ajax({
+                    type: 'get',
+                    url: 'http://localhost:8000/admin/category_search',
+                    success: function (backData) {
+                        // console.log(backData);
+                        //调用模板方法
+                        var resHtml = template('ooo', backData);
+                        $('tbody').html(resHtml);;
+                    }
+                });
+            }
+            //调用一次获取文章种类的方法;
+            getkind();
 
             //新增分类;
             //给新增按钮加点击事件;
@@ -172,18 +175,9 @@
                         slug: slug
                     },
                     success: function (backData) {
-                        console.log(backData);
-                        //新增成功后,重新的加载一次类别数据,重新的渲染到页面
-                        $.ajax({
-                            type: 'get',
-                            url: 'http://localhost:8000/admin/category_search',
-                            success: function (backData) {
-                                console.log(backData);
-                                //调用模板方法
-                                var resHtml = template('ooo', backData);
-                                $('tbody').html(resHtml);;
-                            }
-                        });
+                        // console.log(backData);
+                        //新增成功后,重新的加载一次类别数据,重新的渲染到页面, 调用一次getkind的函数;
+                        getkind();
                     }
                 });
                 //隐藏模态框
@@ -192,9 +186,44 @@
 
 
             //给删除加点击事件;
-            $('tbody').on('click','a.btn-xs',function () {
-                $(this).parent().parent().remove();
-              })
+            // $('tbody').on('click', 'a.btn-xs', function (id) {
+            //     $.ajax({
+            //         url: 'http://localhost:8000/admin/category_delete',
+            //         type: 'post',
+            //         data: {
+            //             id: id
+            //         },
+            //         success: function (backData) {
+            //             console.log(backData);
+            //             if (backData.code == 200) {
+            //                 // 重新获取数据即可
+            //                 getkind()
+            //             }
+            //         }
+            //     })
+
+            //     // $(this).parent().parent().remove();
+            // })
+
+            window.deleteTr = function (id) {
+                // console.log(id)
+                // 调用接口
+                $.ajax({
+                    url: 'http://localhost:8000/admin/category_delete',
+                    type: 'post',
+                    data: {
+                        id: id
+                    },
+                    success: function (backData) {
+                        // console.log(backData);
+                        if (backData.code == 200) {
+                            // 重新获取数据即可
+                            getkind()
+                        }
+                    }
+                })
+            }
+
 
         })
     </script>
