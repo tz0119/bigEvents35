@@ -75,7 +75,8 @@
                 <tfoot>
                     <tr>
                         <td colspan="3" class="text-center">
-                            <a href="#" class="btn btn-success" data-toggle="modal" data-target="#addModal" id="addkind">新增分类</a>
+                            <a href="#" class="btn btn-success" data-toggle="modal" data-target="#addModal"
+                                id="addkind">新增分类</a>
                         </td>
                     </tr>
                 </tfoot>
@@ -92,13 +93,18 @@
                 </div>
                 <div class="modal-body">
                     <form>
+                        <!-- 新增一个input标签用来存放编辑 自定义id -->
+                        <input type="text" name="id">    
+
                         <div class="form-group">
                             <label for="recipient-name" class="control-label">分类名称:</label>
-                            <input type="text" class="form-control" id="recipient-name1">
+                            <!-- 添加编辑框的name -->
+                            <input type="text" name="name" class="form-control" id="recipient-name1">
                         </div>
                         <div class="form-group">
                             <label for="message-text" class="control-label">分类别名:</label>
-                            <input type="text" class="form-control" id="recipient-name2">
+                            <!-- 添加编辑框slug -->
+                            <input type="text" name="slug" class="form-control" id="recipient-name2">
                         </div>
                     </form>
                 </div>
@@ -156,34 +162,65 @@
             //新增分类;
             //给新增按钮加点击事件;
             $('#model_add').click(function () {
-                //获取用户需要新增的类别名字和别名
-                var name = $('#recipient-name1').val();
-                var slug = $('#recipient-name2').val();
+                // //判断编辑按钮新增的类或者判断保存和新增文字; 如果有这个类就修改编辑文本框的信息,获取form表单的值;发送ajax请求
+                if ($(this).hasClass('btn-success')) {
+                    // alert('编辑的按钮')
+                    //获取form表单里面用户的name和slug;
+                    var formname= $('form [name="name"]').val();
+                    var formslug = $('form [name="slug"]').val();
+                    console.log(formname+":"+formslug);
 
-                $.ajax({
-                    type: 'post',
-                    url: 'http://localhost:8000/admin/category_add',
-                    data: {
-                        name: name,
-                        slug: slug
-                    },
-                    success: function (backData) {
-                        // console.log(backData);
-                        //新增成功后,重新的加载一次类别数据,重新的渲染到页面, 调用一次getkind的函数;
-                        getkind();
-                    }
-                });
+                    var id =$('form [name="id"]').val();
+                    $.ajax({
+                        type:'post',
+                        url:'http://localhost:8000/admin/category_edit',
+                        data :{
+                            id:id,
+                            name :formname,
+                            slug:formslug
+                        },
+                        success:function(backData){
+                            // console.log(backData);
+                            //直接调用重新获取数据的方法就行了.或者改dom树里面的name和slug里面的值就可以了;
+                            getkind();
+                            // $('form [name="name"]').text(name);
+                            // $('form [slug="slug"]').text(slug);
+                        }
+                    })
+                } 
+                else {
+                    //获取用户需要新增的类别名字和别名
+                    var name = $('#recipient-name1').val();
+                    var slug = $('#recipient-name2').val();
+
+                    $.ajax({
+                        type: 'post',
+                        url: 'http://localhost:8000/admin/category_add',
+                        data: {
+                            name: name,
+                            slug: slug
+                        },
+                        success: function (backData) {
+                            // console.log(backData);
+                            //新增成功后,重新的加载一次类别数据,重新的渲染到页面, 调用一次getkind的函数;
+                            getkind();
+                        }
+                    });
+                }
                 //隐藏模态框
                 $('#addModal').modal('hide');
             });
 
+
+// ----------------------------------------------------
+
             //点击新增分类按钮复原;
-            $('#addkind').on('click',function () {
+            $('#addkind').on('click', function () {
                 $('#addModal modal-title').html('新增分类');
                 $('#model_add').text('新增').removeClass('btn-success');
-              })
+            })
 
-
+// ------------------------------------------------------
             //给删除加点击事件;
             $('tbody').on('click', 'a.btn-del', function () {
                 var that = $(this);
@@ -199,8 +236,9 @@
                     },
                     success: function (backData) {
                         console.log(backData);
-                        // 重新获取数据即可
+                        //调用一次方法新增的方法;
                         // getkind()
+                        // 重新获取数据即可
                         if (backData.code == 200) {
                             that.parent().parent().remove();
                         }
@@ -227,20 +265,28 @@
             //     })
             // }
 
+// ---------------------------------------------------------
             //编辑分类;
             $('tbody').on('click', 'a.btn-edit', function () {
+//点击编辑按钮可以修改框里的值;并且显示到页面中;需要拿到编辑按钮里面自定义的data-id;
+var editid = $(this).attr('data-id');
+
+
                 //拿取分类的值到编辑框中;只需要找到编辑的父元素的上一个元素的兄弟元素就可以了;用this代表点谁就是谁,代表泛指,任意的编辑按钮;
-                  var arslug = $(this).parent().prev().text();
-                  var arname = $(this).parent().prev().prev().text();
-                  console.log(arslug+":"+arname)
-                  $('#recipient-name1').val(arname);
-                  $('#recipient-name2').val(arslug);
+                var arslug = $(this).parent().prev().text();
+                var arname = $(this).parent().prev().prev().text();
+                console.log(arslug + ":" + arname)
+                $('#recipient-name1').val(arname);
+                $('#recipient-name2').val(arslug);
 
-                    $('#addModal .modal-title').html('修改分类');
-                    //把编辑的文本改成保存,再递式编程addclass添加一个bootstrap里面按钮框的类;改变按钮框的颜色;
-                    $('#model_add').text('保存').addClass('btn-success');
-
-                    $('#addModal').modal('show');
+//新增一个input,把杠求出来的id放到input框;
+$('form [name="id"]').val(editid)
+// -------------------------------------------------------------------
+                //修改模态框的名称和修改保存按钮的颜色;
+                $('#addModal .modal-title').html('修改分类');
+                //把编辑的文本改成保存,再递式编程addclass添加一个bootstrap里面按钮框的类;改变按钮框的颜色;
+                $('#model_add').text('保存').addClass('btn-success');
+                $('#addModal').modal('show');
             })
 
 
