@@ -116,7 +116,7 @@
         });
 
         $('#model_shutoff').click(function () {
-            alert('shutoff');
+            // alert('shutoff');
             $('#addModal').modal('hide');
         });
 
@@ -138,7 +138,8 @@
             <td class="text-center">
                 <a href="javascript:editTr({&quot;id&quot;:&quot;1&quot;,&quot;slug&quot;:&quot;uncategorized&quot;,&quot;name&quot;:&quot;未分类&quot;});"
                     class="btn btn-info btn-xs">编辑</a>
-                <a href="javascript:deleteTr( {{$value.id}} );" class="btn btn-danger btn-xs">删除</a>
+                <!-- <a href="javascript:deleteTr( {{$value.id}} );" class="btn btn-danger btn-xs">删除</a> -->
+                <a href="javascript:void(0);" data-id="{{$value.id}}" class="btn btn-danger btn-xs btn-del">删除</a>
             </td>
         </tr>
         {{/each}}
@@ -186,7 +187,32 @@
 
 
             //给删除加点击事件;
-            // $('tbody').on('click', 'a.btn-xs', function (id) {
+            $('tbody').on('click', 'a.btn-del', function () {
+                var that = $(this);
+                //获取一下a标签自定义属性data-id的值;也就是你要删除每一行的值;
+                var del = $(this).attr('data-id');
+                console.log(del);
+
+                $.ajax({
+                    url: 'http://localhost:8000/admin/category_delete',
+                    type: 'post',
+                    data: {
+                        id: del
+                    },
+                    success: function (backData) {
+                        console.log(backData);
+                        // 重新获取数据即可
+                        // getkind()
+                        if (backData.code == 200) {
+                            that.parent().parent().remove();
+                        }
+                    }
+                });
+            });
+
+            // window.deleteTr = function (id) {
+            //     // console.log(id)
+            //     // 调用接口
             //     $.ajax({
             //         url: 'http://localhost:8000/admin/category_delete',
             //         type: 'post',
@@ -194,35 +220,14 @@
             //             id: id
             //         },
             //         success: function (backData) {
-            //             console.log(backData);
+            //             // console.log(backData);
             //             if (backData.code == 200) {
             //                 // 重新获取数据即可
             //                 getkind()
             //             }
             //         }
             //     })
-
-            //     // $(this).parent().parent().remove();
-            // })
-
-            window.deleteTr = function (id) {
-                // console.log(id)
-                // 调用接口
-                $.ajax({
-                    url: 'http://localhost:8000/admin/category_delete',
-                    type: 'post',
-                    data: {
-                        id: id
-                    },
-                    success: function (backData) {
-                        // console.log(backData);
-                        if (backData.code == 200) {
-                            // 重新获取数据即可
-                            getkind()
-                        }
-                    }
-                })
-            }
+            // }
 
 
         })
