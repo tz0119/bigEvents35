@@ -129,8 +129,7 @@
             <td>{{$value.name}}</td>
             <td>{{$value.slug}}</td>
             <td class="text-center">
-                <a href="javascript:editTr({&quot;id&quot;:&quot;1&quot;,&quot;slug&quot;:&quot;uncategorized&quot;,&quot;name&quot;:&quot;未分类&quot;});"
-                    class="btn btn-info btn-xs btn-edit">编辑</a>
+                <a href="javascript:void(0);" data-id="{{$value.id}}" class="btn btn-info btn-xs btn-edit">编辑</a>
                 <!-- <a href="javascript:deleteTr( {{$value.id}} );" class="btn btn-danger btn-xs">删除</a> -->
                 <a href="javascript:void(0);" data-id="{{$value.id}}" class="btn btn-danger btn-xs btn-del">删除</a>
             </td>
@@ -230,6 +229,13 @@
 
             //编辑分类;
             $('tbody').on('click', 'a.btn-edit', function () {
+                //拿取分类的值到编辑框中;只需要找到编辑的父元素的上一个元素的兄弟元素就可以了;用this代表点谁就是谁,代表泛指,任意的编辑按钮;
+                  var arslug = $(this).parent().prev().text();
+                  var arname = $(this).parent().prev().prev().text();
+                  console.log(arslug+":"+arname)
+                  $('#recipient-name1').val(arname);
+                  $('#recipient-name2').val(arslug);
+
                     $('#addModal .modal-title').html('修改分类');
                     //把编辑的文本改成保存,再递式编程addclass添加一个bootstrap里面按钮框的类;改变按钮框的颜色;
                     $('#model_add').text('保存').addClass('btn-success');
