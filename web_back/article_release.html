@@ -27,12 +27,14 @@
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">文章标题：</label>
                     <div class="col-sm-10">
-                        <input type="email" class="form-control" id="inputEmail3" placeholder="文章标题">
+                        <input type="text" class="form-control" id="inputEmail3" placeholder="文章标题">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputPassword3" class="col-sm-2 control-label">文章封面：</label>
                     <div class="col-sm-10">
+                        <!-- 新增一个img显示图片 -->
+                        <img src="" alt="" style="height: 50px">
                         <input type="file" id="exampleInputFile">
                     </div>
                 </div>
@@ -79,6 +81,17 @@
             </form>
         </div>
     </div>
+
+    <script>
+        $(function () {
+            $('#exampleInputFile').on('change', function () {
+                //图片预览;
+                var icon = this.files[0];
+                var url = URL.createObjectURL(icon);
+                $(this).prev().attr('src', url)
+            })
+        })
+    </script>
 
 </body>
 
