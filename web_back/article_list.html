@@ -323,9 +323,19 @@
 
 
         //给分页插件加效果;
-        $('.pagination').twbsPagination({
-            totalPages: 35,
-            visiblePages: 7,
+
+
+        //要想显示选定特定种类的页码,就要先申明一个总页码;
+        var myallpage = 10;
+        //分页插件高级用法;
+        var $pagination = $('.pagination');
+        var defaultOpts = {
+            totalPages: myallpage,
+            visiblePages: 5,
+            first: '首页',
+            last: '尾页',
+            next: '下一页',
+            prev: '上一页',
             onPageClick: function (event, page) {
                 // console.log(event); //事件
                 // console.log(page) //页码
@@ -333,7 +343,8 @@
                 //调用一次详细显示的方法;将点击的页码对应的详细信息显示在页面上;
                 getkind(page)
             }
-        });
+        }
+        $pagination.twbsPagination(defaultOpts);
 
         //把显示用户详细详细封装成一个方法;
         function getkind(mypage) {
@@ -354,6 +365,18 @@
                     if (backdata.code == 200) {
                         var reshtml = template('nn', backdata);
                         $('tbody').html(reshtml);
+
+                        //分页插件的高级用法;显示选定种类的总页数;
+                        var totalPages = backdata.totalPage;
+                        if (myallpage != totalPages) {
+                            myallpage = totalPages;
+                            var currentPage = $pagination.twbsPagination('getCurrentPage');
+                            $pagination.twbsPagination('destroy');
+                            $pagination.twbsPagination($.extend({}, defaultOpts, {
+                                startPage: currentPage,
+                                totalPages: totalPages
+                            }));
+                        }
                     }
                 }
             })
