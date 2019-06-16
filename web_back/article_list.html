@@ -370,7 +370,7 @@
                         var totalPages = backdata.totalPage;
                         if (myallpage != totalPages) {
                             myallpage = totalPages;
-                            var currentPage = $pagination.twbsPagination('getCurrentPage');
+                            var currentPage = 1;
                             $pagination.twbsPagination('destroy');
                             $pagination.twbsPagination($.extend({}, defaultOpts, {
                                 startPage: currentPage,
