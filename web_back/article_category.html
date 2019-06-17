@@ -152,7 +152,7 @@
                         // console.log(backData);
                         //调用模板方法
                         var resHtml = template('ooo', backData);
-                        $('tbody').html(resHtml);;
+                        $('tbody').html(resHtml);
                     }
                 });
             }
@@ -189,7 +189,7 @@
                         data: data,
 
                         success: function (backData) {
-                            console.log(backData);
+                            // console.log(backData);
                             //直接调用重新获取数据的方法就行了.或者改dom树里面的name和slug里面的值就可以了;
                             getkind();
                             // $('form [name="name"]').text(name);
@@ -244,22 +244,22 @@
                 var del = $(this).attr('data-id');
                 console.log(del);
 
-                $.ajax({
-                    url: 'http://localhost:8000/admin/category_delete',
-                    type: 'post',
-                    data: {
-                        id: del
-                    },
-                    success: function (backData) {
-                        console.log(backData);
-                        //调用一次方法新增的方法;
-                        // getkind()
-                        // 重新获取数据即可
-                        if (backData.code == 200) {
-                            that.parent().parent().remove();
-                        }
-                    }
-                });
+                // $.ajax({
+                //     url: 'http://localhost:8000/admin/category_delete',
+                //     type: 'post',
+                //     data: {
+                //         id: del
+                //     },
+                //     success: function (backData) {
+                //         // console.log(backData);
+                //         //调用一次方法新增的方法;
+                //         // getkind()
+                //         // 重新获取数据即可
+                //         if (backData.code == 200) {
+                //             that.parent().parent().remove();
+                //         }
+                //     }
+                // });
             });
 
             // window.deleteTr = function (id) {
@@ -291,7 +291,7 @@
                 //拿取分类的值到编辑框中;只需要找到编辑的父元素的上一个元素的兄弟元素就可以了;用this代表点谁就是谁,代表泛指,任意的编辑按钮;
                 var arslug = $(this).parent().prev().text();
                 var arname = $(this).parent().prev().prev().text();
-                console.log(arslug + ":" + arname)
+                // console.log(arslug + ":" + arname)
                 $('#recipient-name1').val(arname);
                 $('#recipient-name2').val(arslug);
 

@@ -294,7 +294,7 @@
 
             <td class="text-center">
                 <a href="article_edit.html" data-id="{{$value.id}}" class="btn btn-default btn-xs">编辑</a>
-                <a href="javascript:void(0);" data-id="{{$value.id}}" class="btn btn-danger btn-xs">删除</a>
+                <a href="javascript:void(0);" data-id="{{$value.id}}" class="btn btn-danger btn-xs btn-del">删除</a>
             </td>
         </tr>
 
@@ -318,8 +318,6 @@
                 $('#selCategory').html(reshtml);
             }
         });
-
-
 
 
         //给分页插件加效果;
@@ -361,7 +359,7 @@
                     perpage: 5
                 },
                 success: function (backdata) {
-                    console.log(backdata);
+                    // console.log(backdata);
                     if (backdata.code == 200) {
                         var reshtml = template('nn', backdata);
                         $('tbody').html(reshtml);
@@ -387,9 +385,6 @@
             //当点击筛选按钮的时候,就调用一次详细信息显示在页面上;
             getkind(1);
 
-
-
-
             //     $.ajax({
             //         type: "get",
             //         url: "http://localhost:8000/admin/search",
@@ -405,10 +400,48 @@
             //                 var resHTML = template('nn', backData);
             //                 $('tbody').html(resHTML);      
             //             }   
-            //         }
+            //         } 
             // })
         })
         $('#btnSearch').trigger('click');
+
+        // function getat() {
+        //     //给发布的文章添加删除事件;
+        //     $.ajax({
+        //         url: 'http://localhost:8000/admin/search',
+        //         success: function (backdata) {
+        //             // console.log(backdata); 
+        //             // 调用模板引擎;
+        //             var reshtml = template('nn', backdata);
+        //             // console.log(reshtml);
+        //             $('tbody').html(reshtml)
+        //         }
+        //     })
+        // }
+        // getat();
+
+
+        //给tbody加委托点击事件;
+        $('tbody').on('click', 'a.btn-del', function () {
+            var that = $(this)
+            // 获取删除按钮的自定义的id;
+            var del = $(this).attr('data-id');
+            console.log(del)
+            $.ajax({
+                type:'get',
+                url: 'http://localhost:8000/admin/article_delete',
+                data: {
+                    id: del
+                },
+                success: function (backdata) {
+                    console.log(backdata)
+                    if (backdata.code == 200) {
+                        that.parent().parent().remove();
+                    }
+                    // getat();
+                }
+            })
+        })
     </script>
 
 </body>
