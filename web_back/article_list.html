@@ -291,9 +291,10 @@
 
             <td class="text-center">{{$value.state}}</td>
 
-
+            <!-- article_edit.html -->
             <td class="text-center">
-                <a href="article_edit.html" data-id="{{$value.id}}" class="btn btn-default btn-xs">编辑</a>
+                <a href="article_edit.html?={{$value.id}}" data-id="{{$value.id}}"
+                    class="btn btn-default btn-xs btn-edit">编辑</a>
                 <a href="javascript:void(0);" data-id="{{$value.id}}" class="btn btn-danger btn-xs btn-del">删除</a>
             </td>
         </tr>
@@ -405,20 +406,20 @@
         })
         $('#btnSearch').trigger('click');
 
-        // function getat() {
-        //     //给发布的文章添加删除事件;
-        //     $.ajax({
-        //         url: 'http://localhost:8000/admin/search',
-        //         success: function (backdata) {
-        //             // console.log(backdata); 
-        //             // 调用模板引擎;
-        //             var reshtml = template('nn', backdata);
-        //             // console.log(reshtml);
-        //             $('tbody').html(reshtml)
-        //         }
-        //     })
-        // }
-        // getat();
+        function getat() {
+            //给发布的文章添加删除事件;
+            $.ajax({
+                url: 'http://localhost:8000/admin/search',
+                success: function (backdata) {
+                    // console.log(backdata); 
+                    // 调用模板引擎;
+                    var reshtml = template('nn', backdata);
+                    // console.log(reshtml);
+                    $('tbody').html(reshtml)
+                }
+            })
+        }
+        getat();
 
 
         //给tbody加委托点击事件;
@@ -428,19 +429,28 @@
             var del = $(this).attr('data-id');
             console.log(del)
             $.ajax({
-                type:'get',
+                type: 'get',
                 url: 'http://localhost:8000/admin/article_delete',
                 data: {
                     id: del
                 },
                 success: function (backdata) {
                     console.log(backdata)
-                    if (backdata.code == 200) {
-                        that.parent().parent().remove();
-                    }
-                    // getat();
+                    // 直接重新获取数据也可以;
+                    // if (backdata.code == 200) {
+                    //     that.parent().parent().remove();
+                    // }
+                    //调用一次新增文章详细信息的方法也可以;
+                    getat();
                 }
             })
+        })
+
+        // 给已发布的文章添加编辑修改的功能;
+        // 给tbody添加编辑委托点击事件;
+        $('tbody').on('click', 'a.btn-edit', function () {
+            var title = $(this).parent().prev().prev().prev().prev().prev().text();
+            $('#inputEmail3').text(title);
         })
     </script>
 

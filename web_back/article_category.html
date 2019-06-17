@@ -244,22 +244,22 @@
                 var del = $(this).attr('data-id');
                 console.log(del);
 
-                // $.ajax({
-                //     url: 'http://localhost:8000/admin/category_delete',
-                //     type: 'post',
-                //     data: {
-                //         id: del
-                //     },
-                //     success: function (backData) {
-                //         // console.log(backData);
-                //         //调用一次方法新增的方法;
-                //         // getkind()
-                //         // 重新获取数据即可
-                //         if (backData.code == 200) {
-                //             that.parent().parent().remove();
-                //         }
-                //     }
-                // });
+                $.ajax({
+                    url: 'http://localhost:8000/admin/category_delete',
+                    type: 'post',
+                    data: {
+                        id: del
+                    },
+                    success: function (backData) {
+                        // console.log(backData);
+                        //调用一次方法新增的方法;
+                        // getkind()
+                        // 重新获取数据即可
+                        if (backData.code == 200) {
+                            that.parent().parent().remove();
+                        }
+                    }
+                });
             });
 
             // window.deleteTr = function (id) {
@@ -286,7 +286,6 @@
             $('tbody').on('click', 'a.btn-edit', function () {
                 //点击编辑按钮可以修改框里的值;并且显示到页面中;需要拿到编辑按钮里面自定义的data-id;
                 var editid = $(this).attr('data-id');
-
 
                 //拿取分类的值到编辑框中;只需要找到编辑的父元素的上一个元素的兄弟元素就可以了;用this代表点谁就是谁,代表泛指,任意的编辑按钮;
                 var arslug = $(this).parent().prev().text();
