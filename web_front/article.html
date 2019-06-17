@@ -205,6 +205,38 @@
         <p>电话：0755-****888 粤ICP备*******8号</p>
     </div>
 
+    <!-- 导入模板引擎 -->
+    <script src="./template-web.js"></script>
+    <!-- 针对发布的作者和时间设置模板引擎 -->
+    <script id="xxx" type="text/html">
+        {{data.author}} 发布于 {{data.date}}&nbsp;&nbsp;&nbsp   分类: {{data.type}}&nbsp;&nbsp;&nbsp   阅读:{{data.read}}
+        &nbsp;&nbsp;&nbsp   评论: {{data.comment}}
+    </script>
+
+    <script src="./js/jquery-1.12.4.min.js"></script>
+    <script>
+        $(function () {
+            //url中的id;
+            var id =window.location.search.split('=')[1];      //split是截取元素;
+            console.log(id);
+            
+            $.ajax({
+                url:'http://localhost:8000/admin/search',
+                data :{
+                    id:id
+                },
+                success:function(backdata){
+                    console.log(backdata); 
+                    $('.article_title').text(backdata.data.title);
+                    $('.article_con').html(backdata.data.content); 
+                    //调用模板引擎;
+                    var reshtml = template('xxx',backdata);
+                    $('.article_info').html(reshtml)           
+                }
+            })
+          })
+    
+    </script>
 </body>
 
 </html>
